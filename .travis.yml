@@ -22,8 +22,9 @@ branches:
 
 stages:
   - build
-  - name: document
-      if: (branch = master) AND (os = linux)
+  - document
+
+  # if: (branch = master) AND (os = linux)
       
   # TODO: - test
   # TODO: - deploy
