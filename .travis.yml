@@ -12,8 +12,8 @@ compiler:
 
 branches:
   only:
+  - /feature/travis-integration
 #  - master
-  - travis-experimental
 
 install:
   - sudo apt-get install autoconf
