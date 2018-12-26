@@ -27,3 +27,9 @@ script:
     autoconf
     ./configure
     make
+
+notifications:
+  email:
+    recipients:
+      - fabien@onepost.net
+      
