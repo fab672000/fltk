@@ -20,40 +20,53 @@ branches:
   - master
   - /^feature.*$/
 
-before_install:
-  - |
-    if [ $TRAVIS_OS_NAME == linux ]; then
-      sudo apt-get update -q
-      sudo apt-get install -y make autoconf man
-      sudo apt-get install -y doxygen libxinerama-dev libxcursor-dev libasound2-dev
-      sudo apt-get install -y libpango1.0-dev libcairo2-dev
-    fi
-    if [ $TRAVIS_OS_NAME == osx ]; then
-      brew install ccache # need to install on OSX
-      export PATH="/usr/local/opt/ccache/libexec:$PATH"
-      brew install doxygen
-    fi
-    
-script:
-  - |
-   # Configure build
-    autoconf
-   if [ $TRAVIS_OS_NAME == linux ]; then
-      ./configure --enable-pango --enable-cairo
-   else
-      ./configure
-   fi
+stages:
+  - build
+  - document
+      if: (branch = master) AND (os = linux)
+      
+  # TODO: - test
+  # TODO: - deploy
 
-   # Build
-   make
-   
-   # Generate doxygen documentation but build only once on first build
-   if [ $TRAVIS_OS_NAME == linux ] && [ $CC == "gcc" ] ; then
-       doxygen --version
-       cd documentation
-       make html
-       cd -
-    fi
+
+build-unix-configure:
+  stage: build
+  
+  before_script:
+    - if [ $TRAVIS_OS_NAME == linux ]; then
+        sudo apt-get update -q
+        sudo apt-get install -y make autoconf man
+        sudo apt-get install -y libxinerama-dev libxcursor-dev libasound2-dev
+        sudo apt-get install -y libpango1.0-dev libcairo2-dev
+      elif [ $TRAVIS_OS_NAME == osx ]; then
+        brew install ccache # need to install on OSX
+        export PATH="/usr/local/opt/ccache/libexec:$PATH"
+      fi
+
+  script:
+    - autoconf
+    - if [ $TRAVIS_OS_NAME == linux ]; then
+        ./configure --enable-pango --enable-cairo
+      else
+        ./configure
+      fi
+    - make
+
+document-with-doxygen:
+  stage: document
+
+  before_script:
+    - if [ $TRAVIS_OS_NAME == osx ]; then
+        brew install doxygen
+      elif [ $TRAVIS_OS_NAME == linux ]; then
+        sudo apt-get install -y doxygen
+      fi
+
+  script:
+    - doxygen --version
+    - cd documentation
+    - make html
+    - cd -
 
 notifications:
   email:
