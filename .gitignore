@@ -21,6 +21,9 @@ etc/FLTKConfig.cmake
 *.tlog
 .vs/
 
+# Emacs
+**/*.*~
+
 # /
 /autom4te*.cache
 /build
