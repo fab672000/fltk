@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+
+language: c
+
+os:
+  - linux
+
+compiler:
+  - gcc
+  - clang
+
+branches:
+  only:
+#  - master
+  - travis-experimental
+
+install:
+  - sudo apt-get install autoconf
+
+script:
+  - |
+    autoconf
+    ./configure
+    make
