@@ -4,15 +4,15 @@ cache: ccache
 
 language:
   - c++
-  - objective-c
+# - objective-c
 
 os:
   - linux
-  - osx
+  # - osx
   
 compiler:
   - gcc
-  - clang
+  # - clang
 
 branches:
   only:
@@ -36,6 +36,15 @@ script:
     autoconf
     ./configure
     make
+
+after_success:
+  - |
+    if [ $TRAVIS_OS_NAME == linux ]; then
+      doxygen --version
+      cd documentation
+      make html
+      cd -
+    fi
 
 notifications:
   email:
