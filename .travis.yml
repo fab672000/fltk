@@ -5,8 +5,6 @@ language:
   - c++
   - objective-c
 
-cache: ccache
-
 os:
   - linux
   - osx
@@ -20,45 +18,18 @@ branches:
   - master
   - /^feature.*$/
 
-#stages:
-#  - build
-#  - document
+before_install:
+  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update -q && sudo apt-get install -y doxygen libxinerama-dev libxcursor-dev libasound2-dev; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew install doxygen; fi
 
-  # if: (branch = master) AND (os = linux)
-      
-  # TODO: - test
-  # TODO: - deploy
-
-    before_script:
-      - if [ $TRAVIS_OS_NAME == linux ]; then
-          sudo apt-get update -q
-          sudo apt-get install -y make autoconf man
-          sudo apt-get install -y libxinerama-dev libxcursor-dev libasound2-dev
-          sudo apt-get install -y libpango1.0-dev libcairo2-dev
-        elif [ $TRAVIS_OS_NAME == osx ]; then
-          brew install ccache # need to install on OSX
-          export PATH="/usr/local/opt/ccache/libexec:$PATH"
-        fi
-      - if [ $TRAVIS_OS_NAME == osx ]; then
-          brew install doxygen
-        elif [ $TRAVIS_OS_NAME == linux ]; then
-          sudo apt-get install -y doxygen
-        fi
-	
-    script:
-        - autoconf
-        - if [ $TRAVIS_OS_NAME == linux ]; then
-            ./configure --enable-pango --enable-cairo
-          else
-            ./configure
-          fi
-        - make
-        - doxygen --version
-        - cd documentation
-        - make html
-        - cd -
+script:
+  - |
+    autoconf
+    ./configure
+    make
 
 notifications:
   email:
     recipients:
       - fabien@onepost.net
+      
