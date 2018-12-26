@@ -28,6 +28,7 @@ before_install:
     fi
     if [ $TRAVIS_OS_NAME == osx ]; then
       brew install ccache # need to install on OSX
+      export PATH="/usr/local/opt/ccache/libexec:$PATH"
       brew install doxygen
     fi
 
