@@ -22,12 +22,11 @@ branches:
 
 stages:
   - build
-  - document
+  - name: document
       if: (branch = master) AND (os = linux)
       
   # TODO: - test
   # TODO: - deploy
-
 
 build-unix-configure:
   stage: build
@@ -72,4 +71,3 @@ notifications:
   email:
     recipients:
       - fabien@onepost.net
-      
