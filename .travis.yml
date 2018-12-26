@@ -27,8 +27,6 @@ before_install:
       sudo apt-get install -y make autoconf man
       sudo apt-get install -y doxygen libxinerama-dev libxcursor-dev libasound2-dev
       sudo apt-get install -y libpango1.0-dev libcairo2-dev
-       else
-
     fi
     if [ $TRAVIS_OS_NAME == osx ]; then
       brew install ccache # need to install on OSX
