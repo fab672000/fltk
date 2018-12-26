@@ -29,10 +29,7 @@ branches:
   # TODO: - test
   # TODO: - deploy
 
-jobs:
-  include:
-    - stage: build
-      before_script:
+    before_script:
       - if [ $TRAVIS_OS_NAME == linux ]; then
           sudo apt-get update -q
           sudo apt-get install -y make autoconf man
@@ -42,7 +39,13 @@ jobs:
           brew install ccache # need to install on OSX
           export PATH="/usr/local/opt/ccache/libexec:$PATH"
         fi
-      script:
+      - if [ $TRAVIS_OS_NAME == osx ]; then
+          brew install doxygen
+        elif [ $TRAVIS_OS_NAME == linux ]; then
+          sudo apt-get install -y doxygen
+        fi
+	
+    script:
         - autoconf
         - if [ $TRAVIS_OS_NAME == linux ]; then
             ./configure --enable-pango --enable-cairo
@@ -50,19 +53,10 @@ jobs:
             ./configure
           fi
         - make
-
-    - stage: document
-       before_script:
-         - if [ $TRAVIS_OS_NAME == osx ]; then
-      	     brew install doxygen
-      	   elif [ $TRAVIS_OS_NAME == linux ]; then
-             sudo apt-get install -y doxygen
-           fi
-       script:
-         - doxygen --version
-         - cd documentation
-         - make html
-         - cd -
+        - doxygen --version
+        - cd documentation
+        - make html
+        - cd -
 
 notifications:
   email:
