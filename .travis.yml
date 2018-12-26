@@ -31,7 +31,14 @@ before_install:
       export PATH="/usr/local/opt/ccache/libexec:$PATH"
       brew install doxygen
     fi
-
+    if [ $TRAVIS_OS_NAME == linux ]; then
+       echo current compiler is $COMPILER
+       doxygen --version
+       cd documentation
+       make html
+       cd -
+    fi
+    
 script:
   - |
     autoconf
