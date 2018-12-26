@@ -18,7 +18,7 @@ branches:
   - master
   - /^feature.*$/
 
-before_install:
+before_script:
   - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update -q && sudo apt-get install -y doxygen libxinerama-dev libxcursor-dev libasound2-dev; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then brew install doxygen; fi
 
