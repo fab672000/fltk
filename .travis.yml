@@ -20,9 +20,9 @@ branches:
   - master
   - /^feature.*$/
 
-stages:
-  - build
-  - document
+#stages:
+#  - build
+#  - document
 
   # if: (branch = master) AND (os = linux)
       
