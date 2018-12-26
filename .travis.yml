@@ -5,6 +5,8 @@ language:
   - c++
   - objective-c
 
+cache: ccache
+
 os:
   - linux
   - osx
@@ -19,8 +21,15 @@ branches:
   - /^feature.*$/
 
 before_install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update -q && sudo apt-get install -y doxygen libxinerama-dev libxcursor-dev libasound2-dev; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew install doxygen; fi
+  - |
+    if [ $TRAVIS_OS_NAME == linux ]; then
+      sudo apt-get update -q
+      sudo apt-get install -y doxygen libxinerama-dev libxcursor-dev libasound2-dev
+    fi
+    if [ $TRAVIS_OS_NAME == osx ]; then
+      brew install ccache # need to install on OSX
+      brew install doxygen
+    fi
 
 script:
   - |
