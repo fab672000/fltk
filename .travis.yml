@@ -15,8 +15,18 @@ compiler:
   - clang
 
 env:
-  - ANALYZE=false
-  - ANALYZE=true
+  - |
+    ANALYZE=false
+    DOC=false
+
+
+matrix:
+  include:
+    if: os = linux AND compiler = clang
+    env:
+      - |
+        ANALYZE=true
+        DOC = true
 
 branches:
   only:
@@ -46,7 +56,7 @@ script:
      cd cmake-build
      make
    else
-     if [ "$CC" = "clang" ]; then
+     if [ $TRAVIS_OS_NAME == linux ] && [ "$CC" = "clang" ]; then
           scan-build -h
           scan-build cmake -G "Unix Makefiles"
           scan-build --status-bugs -v
