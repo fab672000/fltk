@@ -48,14 +48,11 @@ script:
    else
      if [ "$CC" = "clang" ]; then
           scan-build -h
-          scan-build cmake -G "Unix Makefiles" ..
-          scan-build -enable-checker security.FloatLoopCounter \
-            -enable-checker security.insecureAPI.UncheckedReturn \
-            --status-bugs -v \
+          scan-build cmake -G "Unix Makefiles"
+          scan-build --status-bugs -v
           make
      fi
    fi
-fi 
 
 after_success:
   - |
