@@ -22,11 +22,9 @@ env:
 
 matrix:
   include:
-    if: os = linux AND compiler = clang
-    env:
-      - |
-        ANALYZE=true
-        DOC = true
+    os: linux
+    compiler: clang
+    env: ANALYZE=true DOC = true
 
 branches:
   only:
