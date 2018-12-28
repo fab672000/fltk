@@ -8,11 +8,15 @@ language:
 
 os:
   - linux
-  - osx
+  #- osx
   
 compiler:
-  - gcc
+  #- gcc
   - clang
+
+env:
+  - ANALYZE=false
+  - ANALYZE=true
 
 branches:
   only:
@@ -33,9 +37,25 @@ before_script:
 
 script:
   - |
-    autoconf
-    ./configure
-    make
+   if [ $ANALYZE = "false" ]; then
+     autoconf
+     ./configure
+     make
+     mkdir cmake-build
+     cmake -G "Unix Makefiles" -S .  -B"./cmake-build"
+     cd cmake-build
+     make
+   else
+     if [ "$CC" = "clang" ]; then
+          scan-build -h
+          scan-build cmake -G "Unix Makefiles" ..
+          scan-build -enable-checker security.FloatLoopCounter \
+            -enable-checker security.insecureAPI.UncheckedReturn \
+            --status-bugs -v \
+          make
+     fi
+   fi
+fi 
 
 after_success:
   - |
