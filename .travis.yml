@@ -8,10 +8,10 @@ language:
 
 os:
   - linux
-  #- osx
+  - osx
   
 compiler:
-  #- gcc
+  - gcc
   - clang
 
 env:
@@ -19,12 +19,11 @@ env:
     ANALYZE=false
     DOC=false
 
-
 matrix:
   include:
     os: linux
     compiler: clang
-    env: ANALYZE=true DOC = true
+    env: ANALYZE=true DOC=true
 
 branches:
   only:
@@ -54,12 +53,9 @@ script:
      cd cmake-build
      make
    else
-     if [ $TRAVIS_OS_NAME == linux ] && [ "$CC" = "clang" ]; then
-          scan-build -h
-          scan-build cmake -G "Unix Makefiles"
-          scan-build --status-bugs -v
-          make
-     fi
+     scan-build cmake -G "Unix Makefiles"
+     scan-build --status-bugs -v
+     make
    fi
 
 after_success:
